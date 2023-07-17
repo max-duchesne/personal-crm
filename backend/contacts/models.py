@@ -15,6 +15,3 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.first_name + " " + self.last_name
-    
-# later can implement a model to track all the times i met with a contact and what we talked about
-# will need to add a serializer and viewset for this model and add it to a router (or maybe add a new app for this model)

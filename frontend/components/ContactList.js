@@ -1,39 +1,44 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { SafeAreaView, View, SectionList, StyleSheet, Text } from 'react-native';
 
 export default function ContactList(props) {
   const { contacts } = props;
 
-  const Item = ({ item }) => (
-    <View style={styles.item}>
-      <Text style={styles.name}>{item.first_name} {item.last_name}</Text>
-    </View>
-  );
-
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={contacts}
-        renderItem={Item}
-        keyExtractor={(item) => item.id}
-        style={styles.list}
+    <SafeAreaView style={styles.container}>
+      <SectionList
+        sections={contacts}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({item}) => (
+          <View style={styles.item}>
+            <Text style={styles.title}>{item.first_name} {item.last_name}</Text>
+          </View>
+        )}
+        renderSectionHeader={({section: {title}}) => (
+          <Text style={styles.header}>{title}</Text>
+        )}
       />
-    </View>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    backgroundColor: 'grey',
-    padding: 20,
-    marginVertical: 8,
     marginHorizontal: 16,
   },
-  name: {
+  item: {
+    backgroundColor: 'white',
+    padding: 20,
+    marginVertical: 8,
+  },
+  header: {
     fontSize: 32,
+    backgroundColor: 'black',
+    color: 'white',
+    padding: 10,
+  },
+  title: {
+    fontSize: 24,
   },
 });
