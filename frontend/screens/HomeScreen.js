@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Text, Button, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import { ContactContext } from '../context/ContactContext';
 import ContactList from '../components/ContactList';
 
@@ -12,12 +12,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <ContactList contacts={contacts}/>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
+      <ContactList navigation={navigation}/>
     </View>
   );
 }
