@@ -1,7 +1,10 @@
 import { createContext, useState, useEffect } from 'react';
 import { fetchContacts } from "../api/api";
 
-export const ContactContext = createContext([]);
+export const ContactContext = createContext({
+  contacts: [],
+  updateContacts: () => {},
+});
 
 export const ContactProvider = ({ children }) => {
   const [contacts, setContacts] = useState([]);
@@ -16,8 +19,20 @@ export const ContactProvider = ({ children }) => {
       });
   }, []);
 
+  const updateContacts = (updatedContact) => {
+    setContacts(prevContacts => {
+      const updatedContacts = prevContacts.map(contact => {
+        if (contact.id === updatedContact.id) {
+          return updatedContact;
+        }
+        return contact;
+      });
+      return updatedContacts;
+    });
+  };
+
   return (
-    <ContactContext.Provider value={contacts}>
+    <ContactContext.Provider value={{ contacts, updateContacts }}>
       {children}
     </ContactContext.Provider>
   );

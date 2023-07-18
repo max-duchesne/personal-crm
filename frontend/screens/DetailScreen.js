@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { API_URL } from '../api/api';
+import { ContactContext } from '../context/ContactContext';
 
 export default function DetailScreen({ route }) {
   const { contact } = route.params;
+  const { updateContacts } = useContext(ContactContext);
   const [updatedContact, setUpdatedContact] = useState({
     id: contact.id,
     first_name: contact.first_name,
@@ -44,6 +46,8 @@ export default function DetailScreen({ route }) {
       }
   
       console.log('Contact details updated successfully');
+
+      updateContacts(formattedContact);
     } catch (error) {
       console.error('Error updating contact details:', error);
     }
