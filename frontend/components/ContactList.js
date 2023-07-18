@@ -3,7 +3,7 @@ import { SafeAreaView, View, SectionList, StyleSheet, Text, TouchableOpacity } f
 import { ContactContext } from '../context/ContactContext';
 
 export default function ContactList({ navigation }) {
-  const contacts = useContext(ContactContext);
+  const { contacts, updateContacts } = useContext(ContactContext);
 
   return (
     <SafeAreaView style={styles.container}>

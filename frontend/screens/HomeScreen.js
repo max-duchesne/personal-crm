@@ -4,7 +4,7 @@ import { ContactContext } from '../context/ContactContext';
 import ContactList from '../components/ContactList';
 
 export default function HomeScreen({ navigation }) {
-  const contacts = useContext(ContactContext);
+  const { contacts, updateContacts } = useContext(ContactContext);
 
   if (!contacts|| contacts.length === 0) {
     return <Text>No contacts to show</Text>;
