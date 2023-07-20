@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, Button, StyleSheet, View } from 'react-native';
 import { ContactContext } from '../context/ContactContext';
 import ContactList from '../components/ContactList';
 
 export default function HomeScreen({ navigation }) {
-  const { contacts, updateContacts } = useContext(ContactContext);
+  const { contacts } = useContext(ContactContext);
 
   if (!contacts|| contacts.length === 0) {
     return <Text>No contacts to show</Text>;
@@ -13,6 +13,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ContactList navigation={navigation}/>
+      <Button title="Create Contact" onPress={() => navigation.navigate('Create')} />
     </View>
   );
 }

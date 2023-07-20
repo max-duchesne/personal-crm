@@ -19,6 +19,28 @@ export const ContactProvider = ({ children }) => {
       });
   }, []);
 
+  const addContact = (newContact) => {
+    setContacts(prevContacts => {
+      const title = newContact.last_name[0].toUpperCase();
+      let group = prevContacts.find(item => item.title === title);
+  
+      if (!group) {
+        group = { title, data: [] };
+        prevContacts.push(group);
+      }
+  
+      group.data.push(newContact);
+  
+      group.data.sort((a, b) => {
+        const lastNameComparison = a.last_name.localeCompare(b.last_name);
+        if (lastNameComparison !== 0) return lastNameComparison;
+        return a.first_name.localeCompare(b.first_name);
+      });
+  
+      return [...prevContacts];
+    });
+  };
+  
   const updateContacts = (updatedContact) => {
     setContacts(prevContacts => {
       const updatedContacts = prevContacts.map(contact => {
@@ -32,7 +54,7 @@ export const ContactProvider = ({ children }) => {
   };
 
   return (
-    <ContactContext.Provider value={{ contacts, updateContacts }}>
+    <ContactContext.Provider value={{ contacts, addContact, updateContacts }}>
       {children}
     </ContactContext.Provider>
   );
