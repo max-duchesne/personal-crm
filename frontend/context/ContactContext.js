@@ -40,18 +40,26 @@ export const ContactProvider = ({ children }) => {
       return [...prevContacts];
     });
   };
-  
+
   const updateContacts = (updatedContact) => {
     setContacts(prevContacts => {
-      const updatedContacts = prevContacts.map(contact => {
-        if (contact.id === updatedContact.id) {
-          return updatedContact;
+      const updatedContacts = prevContacts.map(group => {
+        if (!Array.isArray(group.data)) {
+          return group;
         }
-        return contact;
+  
+        const updatedData = group.data.map(contact => {
+          if (contact.id === updatedContact.id) {
+            return updatedContact;
+          }
+          return contact;
+        });
+  
+        return { ...group, data: updatedData };
       });
       return updatedContacts;
     });
-  };
+  };  
 
   return (
     <ContactContext.Provider value={{ contacts, addContact, updateContacts }}>
