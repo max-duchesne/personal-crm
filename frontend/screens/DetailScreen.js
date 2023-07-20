@@ -3,9 +3,9 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { API_URL } from '../api/api';
 import { ContactContext } from '../context/ContactContext';
 
-export default function DetailScreen({ route }) {
+export default function DetailScreen({ route, navigation }) {
   const { contact } = route.params;
-  const { updateContacts } = useContext(ContactContext);
+  const { updateContact, deleteContact } = useContext(ContactContext);
   const [updatedContact, setUpdatedContact] = useState({
     id: contact.id,
     first_name: contact.first_name,
@@ -47,9 +47,27 @@ export default function DetailScreen({ route }) {
   
       console.log('Contact details updated successfully');
 
-      updateContacts(formattedContact);
+      updateContact(formattedContact);
     } catch (error) {
       console.error('Error updating contact details:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`${API_URL}/contacts/${contact.id}/`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete contact');
+      }
+  
+      console.log('Contact deleted successfully');
+      deleteContact(contact.id);
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Error deleting contact:', error);
     }
   };
 
@@ -133,6 +151,9 @@ export default function DetailScreen({ route }) {
       />
 
       <Button title="Update" onPress={handleUpdate} />
+
+      <Button title="Delete" onPress={handleDelete} color="red" />
+
     </View>
   );
 }
