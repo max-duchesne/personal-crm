@@ -41,7 +41,7 @@ export const ContactProvider = ({ children }) => {
     });
   };
 
-  const updateContacts = (updatedContact) => {
+  const updateContact = (updatedContact) => {
     setContacts(prevContacts => {
       const updatedContacts = prevContacts.map(group => {
         if (!Array.isArray(group.data)) {
@@ -59,10 +59,24 @@ export const ContactProvider = ({ children }) => {
       });
       return updatedContacts;
     });
+  };
+
+  const deleteContact = (idToDelete) => {
+    setContacts(prevContacts => {
+      const updatedContacts = prevContacts.map(group => {
+        if (!Array.isArray(group.data)) {
+          return group;
+        }
+  
+        const updatedData = group.data.filter(contact => contact.id !== idToDelete);
+        return { ...group, data: updatedData };
+      }).filter(group => group.data.length > 0);
+      return updatedContacts;
+    });
   };  
 
   return (
-    <ContactContext.Provider value={{ contacts, addContact, updateContacts }}>
+    <ContactContext.Provider value={{ contacts, addContact, updateContact, deleteContact }}>
       {children}
     </ContactContext.Provider>
   );
