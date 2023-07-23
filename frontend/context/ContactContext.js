@@ -19,27 +19,38 @@ export const ContactProvider = ({ children }) => {
       });
   }, []);
 
-  const addContact = (newContact) => {
-    setContacts(prevContacts => {
-      const title = newContact.last_name[0].toUpperCase();
-      let group = prevContacts.find(item => item.title === title);
-  
-      if (!group) {
-        group = { title, data: [] };
-        prevContacts.push(group);
-      }
-  
+  const binarySearch = (arr, x, start, end) => {
+    if (start > end) return start;
+ 
+    let mid=Math.floor((start + end)/2);
+ 
+    if (arr[mid].title === x) return mid;
+ 
+    if(arr[mid].title > x) return binarySearch(arr, x, start, mid - 1);
+    else return binarySearch(arr, x, mid + 1, end);
+}
+
+const addContact = (newContact) => {
+  setContacts(prevContacts => {
+    const title = newContact.last_name[0].toUpperCase();
+    let group = prevContacts.find(item => item.title === title);
+
+    if (!group) {
+      group = { title, data: [newContact] };
+      const index = binarySearch(prevContacts, title, 0, prevContacts.length - 1);
+      prevContacts.splice(index, 0, group);
+    } else {
       group.data.push(newContact);
-  
+
       group.data.sort((a, b) => {
         const lastNameComparison = a.last_name.localeCompare(b.last_name);
         if (lastNameComparison !== 0) return lastNameComparison;
         return a.first_name.localeCompare(b.first_name);
       });
-  
-      return [...prevContacts];
-    });
-  };
+    }
+    return [...prevContacts];
+  });
+};
 
   const updateContact = (updatedContact) => {
     setContacts(prevContacts => {
@@ -73,10 +84,33 @@ export const ContactProvider = ({ children }) => {
       }).filter(group => group.data.length > 0);
       return updatedContacts;
     });
+  };
+
+  const addInteraction = (newInteraction, contactId) => {
+    setContacts(prevContacts => {
+      const updatedContacts = prevContacts.map(group => {
+        if (!Array.isArray(group.data)) {
+          return group;
+        }
+  
+        const updatedData = group.data.map(contact => {
+          if (contact.id === contactId) {
+            return {
+              ...contact,
+              interactions: [...contact.interactions, newInteraction],
+            };
+          }
+          return contact;
+        });
+  
+        return { ...group, data: updatedData };
+      });
+      return updatedContacts;
+    });
   };  
 
   return (
-    <ContactContext.Provider value={{ contacts, addContact, updateContact, deleteContact }}>
+    <ContactContext.Provider value={{ contacts, addContact, updateContact, deleteContact, addInteraction }}>
       {children}
     </ContactContext.Provider>
   );

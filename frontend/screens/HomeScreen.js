@@ -15,8 +15,11 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
       <ContactList navigation={navigation}/>
-      <Button mode="contained" onPress={() => navigation.navigate('Create')} style={styles.button}>
+      <Button mode="contained" onPress={() => navigation.navigate('CreateContact')} style={styles.button}>
         Create Contact
+      </Button>
+      <Button mode="contained" onPress={() => navigation.navigate('CreateInteraction')} style={styles.button}>
+        Create Interaction
       </Button>
     </View>
   );
@@ -25,7 +28,6 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
   button: {
