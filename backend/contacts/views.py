@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .serializers import ContactSerializer
-from .models import Contact
+from .serializers import ContactSerializer, InteractionSerializer
+from .models import Contact, Interaction
 from string import ascii_uppercase
 
 class ContactViewSet(viewsets.ModelViewSet):
@@ -23,3 +23,7 @@ class ContactViewSet(viewsets.ModelViewSet):
                 })
 
         return Response(grouped_contacts)
+    
+class InteractionViewSet(viewsets.ModelViewSet):
+    queryset = Interaction.objects.all()
+    serializer_class = InteractionSerializer

@@ -153,6 +153,18 @@ export default function DetailScreen({ route, navigation }) {
         onChangeText={(value) => handleChange('linkedin', value)}
       />
 
+      <Text style={[styles.label, {color: colors.text}]}>Interactions:</Text>
+      {contact.interactions.map((interaction, index) => (
+        <ScrollView key={index} style={[styles.interactionContainer, {backgroundColor: colors.surface}]}>
+          <Text style={[styles.label, {color: colors.text}]}>Interaction {index + 1}:</Text>
+          <Text style={[styles.label, {color: colors.text}]}>Title: {interaction.title}</Text>
+          <Text style={[styles.label, {color: colors.text}]}>Type: {interaction.interaction_type}</Text>
+          <Text style={[styles.label, {color: colors.text}]}>Date: {interaction.interaction_date}</Text>
+          <Text style={[styles.label, {color: colors.text}]}>Location: {interaction.interaction_location}</Text>
+          <Text style={[styles.label, {color: colors.text}]}>Notes: {interaction.notes}</Text>
+        </ScrollView>
+      ))}
+
       <Button mode="contained" onPress={handleUpdate} style={styles.button}>
         Update
       </Button>

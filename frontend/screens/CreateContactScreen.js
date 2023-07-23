@@ -4,7 +4,7 @@ import { Text, TextInput, Button, useTheme } from 'react-native-paper';
 import { API_URL } from '../api/api';
 import { ContactContext } from '../context/ContactContext';
 
-export default function CreateContactScreen() {
+export default function CreateContactScreen({ navigation }) {
   const { addContact } = useContext(ContactContext);
   const { colors } = useTheme();
   const [newContact, setNewContact] = useState({
@@ -50,6 +50,7 @@ export default function CreateContactScreen() {
       const createdContact = await response.json();
       addContact(createdContact);
       console.log('New contact created successfully');
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Error creating new contact:', error);
     }
