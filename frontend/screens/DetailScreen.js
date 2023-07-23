@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
+import { Text, TextInput, Button, useTheme } from 'react-native-paper';
 import { API_URL } from '../api/api';
 import { ContactContext } from '../context/ContactContext';
 
 export default function DetailScreen({ route, navigation }) {
   const { contact } = route.params;
+  const { colors } = useTheme();
   const { updateContact, deleteContact } = useContext(ContactContext);
   const [updatedContact, setUpdatedContact] = useState({
     id: contact.id,
@@ -72,107 +74,116 @@ export default function DetailScreen({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>First Name:</Text>
+    <ScrollView contentContainerStyle={[styles.container, {backgroundColor: colors.background}]}>
+
+      <Text style={[styles.label, {color: colors.text}]}>First Name:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.first_name}
         onChangeText={(value) => handleChange('first_name', value)}
       />
 
-      <Text style={styles.label}>Last Name:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Last Name:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.last_name}
         onChangeText={(value) => handleChange('last_name', value)}
       />
 
-      <Text style={styles.label}>Email:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Email:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.email}
         onChangeText={(value) => handleChange('email', value)}
       />
 
-      <Text style={styles.label}>Phone:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Phone:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.phone}
         onChangeText={(value) => handleChange('phone', value)}
       />
 
-      <Text style={styles.label}>Address:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Address:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.address}
         onChangeText={(value) => handleChange('address', value)}
       />
 
-      <Text style={styles.label}>Bio:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Bio:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.bio}
         onChangeText={(value) => handleChange('bio', value)}
       />
 
-      <Text style={styles.label}>Notes:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Notes:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.notes}
         onChangeText={(value) => handleChange('notes', value)}
       />
 
-      <Text style={styles.label}>Company:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Company:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.company}
         onChangeText={(value) => handleChange('company', value)}
       />
 
-      <Text style={styles.label}>Title:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Title:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.title}
         onChangeText={(value) => handleChange('title', value)}
       />
 
-      <Text style={styles.label}>Birthday:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>Birthday:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.birthday}
         onChangeText={(value) => handleChange('birthday', value)}
       />
 
-      <Text style={styles.label}>LinkedIn:</Text>
+      <Text style={[styles.label, {color: colors.text}]}>LinkedIn:</Text>
       <TextInput
         style={styles.input}
         value={updatedContact.linkedin}
         onChangeText={(value) => handleChange('linkedin', value)}
       />
 
-      <Button title="Update" onPress={handleUpdate} />
+      <Button mode="contained" onPress={handleUpdate} style={styles.button}>
+        Update
+      </Button>
+      
+      <Button mode="contained" onPress={handleDelete} style={[styles.button, {backgroundColor: colors.error}]}>
+        Delete
+      </Button>
 
-      <Button title="Delete" onPress={handleDelete} color="red" />
-
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#25292e',
-    alignItems: 'center',
+    flexGrow: 1,
     justifyContent: 'center',
+    padding: 20,
   },
-  title: {
-    fontSize: 24,
-    color: 'white',
-    marginBottom: 10,
+  label: {
+    fontSize: 16,
+    marginVertical: 5,
   },
-  details: {
-    fontSize: 18,
-    color: 'white',
-    marginBottom: 5,
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    borderRadius: 5,
+    padding: 10,
+  },
+  button: {
+    marginVertical: 10,
   },
 });
