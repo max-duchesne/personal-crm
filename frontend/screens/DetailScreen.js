@@ -154,14 +154,15 @@ export default function DetailScreen({ route, navigation }) {
       />
 
       <Text style={[styles.label, {color: colors.text}]}>Interactions:</Text>
+      <Text>{'\n'}</Text>
       {Array.isArray(contact.interactions) && contact.interactions.map((interaction, index) => (
         <ScrollView key={index} style={[styles.interactionContainer, {backgroundColor: colors.surface}]}>
-          <Text style={[styles.label, {color: colors.text}]}>Interaction {index + 1}:</Text>
           <Text style={[styles.label, {color: colors.text}]}>Title: {interaction.title}</Text>
           <Text style={[styles.label, {color: colors.text}]}>Type: {interaction.interaction_type}</Text>
           <Text style={[styles.label, {color: colors.text}]}>Date: {interaction.interaction_date}</Text>
           <Text style={[styles.label, {color: colors.text}]}>Location: {interaction.interaction_location}</Text>
           <Text style={[styles.label, {color: colors.text}]}>Notes: {interaction.notes}</Text>
+          <Text>{'\n'}</Text>
         </ScrollView>
       ))}
 
