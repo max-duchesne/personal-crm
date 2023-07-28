@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Text, TextInput, Button, useTheme } from 'react-native-paper';
-import { API_URL } from '../api/api';
+import { updateContact as apiUpdateContact, deleteContact as apiDeleteContact } from '../api/api';
 import { ContactContext } from '../context/ContactContext';
 
 export default function DetailScreen({ route, navigation }) {
@@ -34,37 +34,18 @@ export default function DetailScreen({ route, navigation }) {
     try {
       const formattedBirthday = updatedContact.birthday === '' ? null : updatedContact.birthday;
       const formattedContact = { ...updatedContact, birthday: formattedBirthday };
-
-      const response = await fetch(`${API_URL}/contacts/${contact.id}/`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formattedContact),
-      });
   
-      if (!response.ok) {
-        throw new Error('Failed to update contact details');
-      }
-  
+      const updatedContactAPI = await apiUpdateContact(formattedContact);
       console.log('Contact details updated successfully');
-
-      updateContact(formattedContact);
+      updateContact(updatedContactAPI);
     } catch (error) {
       console.error('Error updating contact details:', error);
     }
   };
-
+  
   const handleDelete = async () => {
     try {
-      const response = await fetch(`${API_URL}/contacts/${contact.id}/`, {
-        method: 'DELETE',
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to delete contact');
-      }
-  
+      await apiDeleteContact(contact.id);
       console.log('Contact deleted successfully');
       deleteContact(contact.id);
       navigation.navigate('Home');

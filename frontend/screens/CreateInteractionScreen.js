@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { ScrollView, StyleSheet, Picker } from 'react-native';
 import { Text, TextInput, Button, useTheme } from 'react-native-paper';
-import { API_URL } from '../api/api';
+import { API_URL, createInteraction as apiCreateInteraction } from '../api/api';
 import { ContactContext } from '../context/ContactContext';
 
 export default function CreateInteractionScreen({ navigation }) {
@@ -36,22 +36,10 @@ export default function CreateInteractionScreen({ navigation }) {
       const formattedContact = `${API_URL}/contacts/${newInteraction.contact}/`;
       const formattedDate = newInteraction.interaction_date === '' ? null : newInteraction.interaction_date;
       const formattedInteraction = { ...newInteraction, contact: formattedContact, interaction_date: formattedDate };
-
-      const response = await fetch(`${API_URL}/interactions/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formattedInteraction),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create new interaction');
-      }
-
-      const createdInteraction = await response.json();
+  
+      const createdInteraction = await apiCreateInteraction(formattedInteraction);
+  
       addInteraction(createdInteraction, parseInt(newInteraction.contact));
-
       console.log('New interaction created successfully');
       navigation.navigate('Home');
     } catch (error) {

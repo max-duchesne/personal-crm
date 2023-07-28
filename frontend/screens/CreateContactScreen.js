@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Text, TextInput, Button, useTheme } from 'react-native-paper';
-import { API_URL } from '../api/api';
+import { createContact as apiCreateContact } from '../api/api';
 import { ContactContext } from '../context/ContactContext';
 
 export default function CreateContactScreen({ navigation }) {
@@ -34,20 +34,9 @@ export default function CreateContactScreen({ navigation }) {
       const formattedLastName = newContact.last_name[0].toUpperCase() + newContact.last_name.slice(1);
       const formattedBirthday = newContact.birthday === '' ? null : newContact.birthday;
       const formattedContact = { ...newContact, first_name: formattedFirstName, last_name: formattedLastName, birthday: formattedBirthday };
-
-      const response = await fetch(`${API_URL}/contacts/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formattedContact),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create new contact');
-      }
-
-      const createdContact = await response.json();
+  
+      const createdContact = await apiCreateContact(formattedContact);
+  
       addContact(createdContact);
       console.log('New contact created successfully');
       navigation.navigate('Home');

@@ -1,5 +1,6 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import { fetchContacts } from "../api/api";
+import { AuthContext } from './AuthContext';
 
 export const ContactContext = createContext({
   contacts: [],
@@ -8,16 +9,19 @@ export const ContactContext = createContext({
 
 export const ContactProvider = ({ children }) => {
   const [contacts, setContacts] = useState([]);
+  const { isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchContacts()
-      .then(data => {
-        setContacts(data);
-      })
-      .catch(error => {
-        console.error('Error fetching contacts:', error);
-      });
-  }, []);
+    if (isLoggedIn) {
+      fetchContacts()
+        .then(data => {
+          setContacts(data);
+        })
+        .catch(error => {
+          console.error('Error fetching contacts:', error);
+        });
+    }
+  }, [isLoggedIn]);
 
   const binarySearch = (arr, x, start, end) => {
     if (start > end) return start;
