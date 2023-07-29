@@ -5,7 +5,7 @@ import { API_URL, createInteraction as apiCreateInteraction } from '../api/api';
 import { ContactContext } from '../context/ContactContext';
 
 export default function CreateInteractionScreen({ navigation }) {
-  const { addInteraction } = useContext(ContactContext);
+  const { contacts, addInteraction } = useContext(ContactContext);
   const { colors } = useTheme();
   const INTERACTION_CHOICES = [
     {label: 'Email', value: 'email'},
@@ -33,19 +33,36 @@ export default function CreateInteractionScreen({ navigation }) {
 
   const handleCreateInteraction = async () => {
     try {
-      const formattedContact = `${API_URL}/contacts/${newInteraction.contact}/`;
+      const fullName = newInteraction.contact.split(' ');
+      const [firstName, lastName] = fullName;
+      let target;
+  
+      for (let i = 0; i < contacts.length; i++) {
+        target = contacts[i].data.find(target => 
+          target.first_name.toLowerCase() === firstName.toLowerCase() && 
+          target.last_name.toLowerCase() === lastName.toLowerCase()
+        );
+        if (target) break;
+      }
+  
+      if (!target) {
+        console.error('Error creating new interaction: Invalid contact name');
+        return;
+      }
+  
+      const formattedContact = `${API_URL}/contacts/${target.id}/`;
       const formattedDate = newInteraction.interaction_date === '' ? null : newInteraction.interaction_date;
       const formattedInteraction = { ...newInteraction, contact: formattedContact, interaction_date: formattedDate };
   
       const createdInteraction = await apiCreateInteraction(formattedInteraction);
   
-      addInteraction(createdInteraction, parseInt(newInteraction.contact));
+      addInteraction(createdInteraction, target.id);
       console.log('New interaction created successfully');
       navigation.navigate('Home');
     } catch (error) {
       console.error('Error creating new interaction:', error);
     }
-  };
+  };  
 
   return (
     <ScrollView contentContainerStyle={[styles.container, {backgroundColor: colors.background}]}>
