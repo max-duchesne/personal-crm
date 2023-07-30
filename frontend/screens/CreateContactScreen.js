@@ -30,8 +30,8 @@ export default function CreateContactScreen({ navigation }) {
 
   const handleCreateContact = async () => {
     try {
-      const formattedFirstName = newContact.first_name ? newContact.first_name[0].toUpperCase() + newContact.first_name.slice(1) : '';
-      const formattedLastName = newContact.last_name[0].toUpperCase() + newContact.last_name.slice(1);
+      const formattedFirstName = newContact.first_name[0].toUpperCase() + newContact.first_name.slice(1);
+      const formattedLastName = newContact.last_name ? newContact.last_name[0].toUpperCase() + newContact.last_name.slice(1) : '';
       const formattedBirthday = newContact.birthday === '' ? null : newContact.birthday;
       const formattedContact = { ...newContact, first_name: formattedFirstName, last_name: formattedLastName, birthday: formattedBirthday };
   
