@@ -36,7 +36,13 @@ export const ContactProvider = ({ children }) => {
 
 const addContact = (newContact) => {
   setContacts(prevContacts => {
-    const title = newContact.last_name[0].toUpperCase();
+    let title;
+    if (newContact.last_name) {
+      title = newContact.last_name[0].toUpperCase();
+    } else {
+      title = newContact.first_name[0].toUpperCase();
+    }
+
     let group = prevContacts.find(item => item.title === title);
 
     if (!group) {
@@ -47,8 +53,11 @@ const addContact = (newContact) => {
       group.data.push(newContact);
 
       group.data.sort((a, b) => {
-        const lastNameComparison = a.last_name.localeCompare(b.last_name);
-        if (lastNameComparison !== 0) return lastNameComparison;
+        let nameA = a.last_name ? a.last_name : a.first_name;
+        let nameB = b.last_name ? b.last_name : b.first_name;
+        
+        const nameComparison = nameA.localeCompare(nameB);
+        if (nameComparison !== 0) return nameComparison;
         return a.first_name.localeCompare(b.first_name);
       });
     }
