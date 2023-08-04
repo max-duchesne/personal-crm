@@ -2,15 +2,21 @@ import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { ContactContext } from '../context/ContactContext';
+import { importContacts } from '../api/nativeContacts';
 import ContactList from '../components/ContactList';
 
 export default function HomeScreen({ navigation }) {
-  const { contacts } = useContext(ContactContext);
+  const { contacts, refreshContacts } = useContext(ContactContext);
   const { colors } = useTheme();
 
-  if (!contacts|| contacts.length === 0) {
-    return <Text>No contacts to show</Text>;
-  }
+  const handleImportContacts = async () => {
+    try {
+      await importContacts();
+      refreshContacts();
+    } catch (error) {
+      console.error('Error importing contacts:', error);
+    }
+  };
 
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
@@ -20,6 +26,9 @@ export default function HomeScreen({ navigation }) {
       </Button>
       <Button mode="contained" onPress={() => navigation.navigate('CreateInteraction')} style={styles.button}>
         Create Interaction
+      </Button>
+      <Button mode="contained" onPress={handleImportContacts} style={styles.button}>
+        Import Contacts
       </Button>
     </View>
   );

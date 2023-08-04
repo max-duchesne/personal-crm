@@ -1,5 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework import status
 from .serializers import ContactSerializer, InteractionSerializer
 from .models import Contact, Interaction
 from django.db.models import CharField, Case, When
@@ -39,6 +41,17 @@ class ContactViewSet(viewsets.ModelViewSet):
                 })
 
         return Response(grouped_contacts)
+    
+    @action(detail=False, methods=['post'])
+    def import_contacts(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer):
+        serializer.save()
     
 class InteractionViewSet(viewsets.ModelViewSet):
     queryset = Interaction.objects.all()

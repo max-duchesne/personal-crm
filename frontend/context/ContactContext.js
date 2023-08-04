@@ -4,22 +4,24 @@ import { AuthContext } from './AuthContext';
 
 export const ContactContext = createContext({
   contacts: [],
-  updateContacts: () => {},
 });
 
 export const ContactProvider = ({ children }) => {
   const [contacts, setContacts] = useState([]);
   const { isLoggedIn } = useContext(AuthContext);
 
+  const refreshContacts = async () => {
+    try {
+      const data = await fetchContacts();
+      setContacts(data);
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+    }
+  }
+
   useEffect(() => {
     if (isLoggedIn) {
-      fetchContacts()
-        .then(data => {
-          setContacts(data);
-        })
-        .catch(error => {
-          console.error('Error fetching contacts:', error);
-        });
+      refreshContacts();
     }
   }, [isLoggedIn]);
 
@@ -123,7 +125,7 @@ const addContact = (newContact) => {
   };  
 
   return (
-    <ContactContext.Provider value={{ contacts, addContact, updateContact, deleteContact, addInteraction }}>
+    <ContactContext.Provider value={{ contacts, addContact, updateContact, deleteContact, addInteraction, refreshContacts }}>
       {children}
     </ContactContext.Provider>
   );
