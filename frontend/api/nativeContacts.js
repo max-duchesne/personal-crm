@@ -2,7 +2,6 @@ import * as Contacts from 'expo-contacts';
 import { API_URL } from './api';
 
 const formatPhoneNumber = (phoneNumberObj) => {
-  //console.log(phoneNumberObj);
   if (!phoneNumberObj) return '';
   const { digits } = phoneNumberObj;
   console.log('digits:', digits);
